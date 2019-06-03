@@ -27,7 +27,10 @@ public class RayCaster {
         initialized = true;
         System.out.println("initializing trigonometry tables!");
         for(short deg = 0; deg < 360; deg ++) {
-            double rad = deg / 180 * Math.PI;
+            double rad = (((float) deg) / 180) * Math.PI;
+			System.out.println(deg + "degrees in radians is " + rad);
+			System.out.println("sin(" + deg + " degrees) = " + Math.sin(rad));
+			System.out.println("cos(" + deg + " degrees) = " + Math.cos(rad));
             sinTable.add(Math.sin(rad));
             cosTable.add(Math.cos(rad));
         }
@@ -48,6 +51,7 @@ public class RayCaster {
         }
         System.out.println("---------------------------------");
         System.out.println("Player's Rotation: (" + Player.viewX + ", " + Player.viewY + ")");
+		System.out.println("Player's Position: (" + Player.x + ", " + Player.y + ", " + Player.z + ")");
         // Player.viewY = 90;
         for(float x = (float) (-Player.fov / 2); x < Player.fov / 2; x += Player.res) {
             for(float y = (float) (-Player.fov / 2); y < Player.fov / 2; y += Player.res) {
@@ -86,7 +90,7 @@ public class RayCaster {
             int rY = (int) Math.round(y);
             int rZ = (int) Math.round(z);
             int index = getIndex(rX, rY, rZ);
-            if(index != -1) {
+            if(index > 0 && index < atomicContent.size()) {
                 // found an intersection between the ray and some matter
                 Atom atom = atomicContent.get(index);
                 Color color = atom.color;
@@ -197,13 +201,13 @@ public class RayCaster {
         for(int i = x; i < x + w; i ++) {
             for(int j = z; j < z + d; j ++) {
                 atomicContent.add(new Atom(i, y, j, new Color(0, 255, 0)));
-                atomicContent.add(new Atom(i, y + h, j, new Color(255, 0, 0)));
+                atomicContent.add(new Atom(i, y + h, j, new Color(0, 255, 0)));
             }
         }
         for(int i = y; i < y + h; i ++) {
             for(int j = z; j < z + d; j ++) {
-                atomicContent.add(new Atom(x, i, j, new Color(255, 0, 0)));
-                atomicContent.add(new Atom(x + w, i, j, new Color(255, 0, 0)));
+                atomicContent.add(new Atom(x, i, j, new Color(0, 0, 255)));
+                atomicContent.add(new Atom(x + w, i, j, new Color(0, 0, 255)));
             }
         }
     }
