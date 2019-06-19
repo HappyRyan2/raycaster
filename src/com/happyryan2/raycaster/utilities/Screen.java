@@ -30,15 +30,15 @@ public class Screen extends JPanel {
 	public static String cursor = "default";
 	public static Font fontRighteous;
 
-    public static void main(String[] args) {
+	public static void main(String[] args) {
 		//create JFrame + canvas for graphics
 		canvas.setDoubleBuffered(true);
-        canvas.setSize(400, 400);
-        frame.add(canvas);
-        frame.pack();
+		canvas.setSize(400, 400);
+		frame.add(canvas);
+		frame.pack();
 		frame.setSize(800, 800);
 		frame.setResizable(false);
-        frame.setVisible(true);
+		frame.setVisible(true);
 		canvas.setFocusable(true);
 
 		//schedule framerate interval function
@@ -64,14 +64,14 @@ public class Screen extends JPanel {
 		// 	File dir = new File(System.getProperty("user.dir"));
 		// 	File res = new File(dir.getPath() + "/res");
 		// 	Font customFont = Font.createFont(Font.TRUETYPE_FONT, new File(res.getPath() + "/fonts/righteous.ttf")).deriveFont(40f);
-	    // 	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		// 	GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		// 	ge.registerFont(customFont);
 		// 	fontRighteous = customFont;
 		// }
 		// catch (Exception e) {
 		// 	e.printStackTrace();
 		// }
-    }
+	}
 
 	public void paint(Graphics g) {
 		//clear background

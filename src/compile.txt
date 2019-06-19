@@ -3,6 +3,8 @@ com/happyryan2/raycaster/game/Player.java
 com/happyryan2/raycaster/raycaster/RayCaster.java
 com/happyryan2/raycaster/raycaster/Atom.java
 com/happyryan2/raycaster/raycaster/Point3D.java
+com/happyryan2/raycaster/raycaster/Vector3D.java
+com/happyryan2/raycaster/raycaster/Triangle3D.java
 com/happyryan2/raycaster/utilities/Delay.java
 com/happyryan2/raycaster/utilities/KeyInputs.java
 com/happyryan2/raycaster/utilities/MouseClick.java
