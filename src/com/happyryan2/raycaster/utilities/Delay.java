@@ -6,6 +6,9 @@ package com.happyryan2.raycaster.utilities;
 
 import java.util.TimerTask;
 import java.awt.Cursor;
+import java.awt.image.BufferedImage;
+import java.awt.Toolkit;
+import java.awt.Point;
 
 import com.happyryan2.raycaster.raycaster.*;
 import com.happyryan2.raycaster.utilities.*;
@@ -13,6 +16,7 @@ import com.happyryan2.raycaster.utilities.*;
 public class Delay extends TimerTask {
 	public void run() {
 		Screen.cursor = "default";
+		Screen.frameCount ++;
 
 		//update screen size
 		Screen.screenW = Screen.canvas.getWidth();
@@ -31,7 +35,16 @@ public class Delay extends TimerTask {
 			Screen.canvas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
 		else {
-			Screen.canvas.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			if(Screen.frame.isFocused())  {
+				BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
+
+				// Create a new blank cursor.
+				Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
+				Screen.canvas.setCursor(blankCursor);
+			}
+			else {
+				Screen.canvas.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+			}
 		}
 	}
 

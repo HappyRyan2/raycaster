@@ -1,42 +1,43 @@
 package com.happyryan2.raycaster.utilities;
 
-import com.happyryan2.raycaster.raycaster.Point3D;
+import com.happyryan2.raycaster.raycaster.Point3d;
 import com.happyryan2.raycaster.raycaster.RayCaster;
 
 import java.awt.Point;
 import java.lang.Math;
 
-import com.happyryan2.raycaster.raycaster.Point3D;
-import com.happyryan2.raycaster.raycaster.Vector3D;
+import com.happyryan2.raycaster.raycaster.Point3d;
+import com.happyryan2.raycaster.raycaster.Point2d;
+import com.happyryan2.raycaster.raycaster.Vector3d;
 
 public class Utils {
 	private static final double EPSILON = 0.0000001;
-	public static float dist3d(Point3D a, Point3D b) {
+	public static float dist3d(Point3d a, Point3d b) {
 		float dx = a.x - b.x;
 		float dy = a.y - b.y;
 		float dz = a.z - b.z;
 		float distSq = (dx * dx) + (dy * dy) + (dz * dz);
 		return (float) Math.sqrt(distSq);
 	}
-	public static float dist3dSq(Point3D a, Point3D b) {
+	public static float dist3dSq(Point3d a, Point3d b) {
 		float dx = a.x - b.x;
 		float dy = a.y - b.y;
 		float dz = a.z - b.z;
 		float distSq = (dx * dx) + (dy * dy) + (dz * dz);
 		return distSq;
 	}
-	public static Point rotate2d(float x, float y, double deg) {
+	public static Point2d rotate2d(double x, double y, double deg) {
 		double rad = deg / 180 * Math.PI;
 		// return new Point(
 		//	 (int) Math.round((double) (x * ((double) RayCaster.cosTable.get(Math.round((int) deg))) - y * (double) RayCaster.sinTable.get(Math.round((int) deg)))),
 		//	 (int) Math.round((double) (x * ((double) RayCaster.sinTable.get(Math.round((int) deg))) + y * (double) RayCaster.cosTable.get(Math.round((int) deg))))
 		// ); // uses tables
-		return new Point(
-			(int) Math.round(x * Math.cos(rad) - y * Math.sin(rad)),
-			(int) Math.round(x * Math.sin(rad) + y * Math.cos(rad))
+		return new Point2d(
+			(float) (x * Math.cos(rad) - y * Math.sin(rad)),
+			(float) (x * Math.sin(rad) + y * Math.cos(rad))
 		);
 	}
-	public static Point3D rotate3d(float x, float y, float z, float yaw, float pitch, float roll) {
+	public static Point3d rotate3d(float x, float y, float z, float yaw, float pitch, float roll) {
 		if(!RayCaster.initialized) {
 			RayCaster.initTrig();
 		}
@@ -58,6 +59,7 @@ public class Utils {
 		while(roll >= 360) {
 			roll -= 360;
 		}
+		// Point rotatedToPitch2d = rotate2d()
 
 		double x1 = x * (double) (RayCaster.cosTable.get(Math.round(roll))) - y * (double) (RayCaster.sinTable.get(Math.round(roll)));
 		double y1 = x * (double) (RayCaster.sinTable.get(Math.round(roll))) + y * (double) (RayCaster.cosTable.get(Math.round(roll)));
@@ -71,26 +73,14 @@ public class Utils {
 		double z3 = y2 * (double) (RayCaster.sinTable.get(Math.round(pitch))) + z2 * (double) (RayCaster.cosTable.get(Math.round(pitch)));
 		double x3 = x2;
 
-		// double x1 = x * Math.cos(roll) - y * Math.sin(roll);
-		// double y1 = x * Math.sin(roll) + y * Math.cos(roll);
-		// double z1 = z;
-		//
-		// double z2 = z1 * Math.cos(yaw) - x1 * Math.sin(yaw);
-		// double x2 = z1 * Math.sin(yaw) + x1 * Math.cos(yaw);
-		// double y2 = y1;
-		//
-		// double y3 = y2 * Math.cos(pitch) - z2 * Math.sin(pitch);
-		// double z3 = y2 * Math.sin(pitch) + z2 * Math.cos(pitch);
-		// double x3 = x2;
-
-		return new Point3D((float) x3, (float) y3, (float) z3);
+		return new Point3d((float) x3, (float) y3, (float) z3);
 	}
-	public static Point3D rayTriangleIntersection(Point3D rayOrigin, Vector3D rayVector, Point3D vertex0, Point3D vertex1, Point3D vertex2) {
-		Vector3D edge1 = (vertex1.vector()).sub(vertex2.vector());
-		Vector3D edge2 = (vertex2.vector()).sub(vertex0.vector());
-		Vector3D h = new Vector3D();
-		Vector3D s = new Vector3D();
-		Vector3D q = new Vector3D();
+	public static Point3d rayTriangleIntersection(Point3d rayOrigin, Vector3d rayVector, Point3d vertex0, Point3d vertex1, Point3d vertex2) {
+		Vector3d edge1 = (vertex1.vector()).sub(vertex2.vector());
+		Vector3d edge2 = (vertex2.vector()).sub(vertex0.vector());
+		Vector3d h = new Vector3d();
+		Vector3d s = new Vector3d();
+		Vector3d q = new Vector3d();
 		double a, f, u, v;
 		edge1 = vertex1.vector().sub(vertex0.vector());
 		edge2 = vertex2.vector().sub(vertex0.vector());
@@ -118,13 +108,13 @@ public class Utils {
 			return null;
 		}
 	}
-	public static boolean segmentIntersectsTriangle(Point3D a, Point3D b, Point3D x, Point3D y, Point3D z) {
+	public static boolean segmentIntersectsTriangle(Point3d a, Point3d b, Point3d x, Point3d y, Point3d z) {
 		/*
 		Returns true if line segment 'ab' intersects triangle 'xyz'.
 		*/
-		Point3D rayOrigin = a;
-		Vector3D rayVector = (b.vector().sub(a.vector()));
-		Point3D intersection = rayTriangleIntersection(rayOrigin, rayVector, x, y, z);
+		Point3d rayOrigin = a;
+		Vector3d rayVector = (b.vector().sub(a.vector()));
+		Point3d intersection = rayTriangleIntersection(rayOrigin, rayVector, x, y, z);
 		if(intersection == null) {
 			return false;
 		}
