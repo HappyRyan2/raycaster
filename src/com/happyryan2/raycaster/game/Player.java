@@ -8,15 +8,15 @@ import com.happyryan2.raycaster.raycaster.Point2d;
 public class Player {
 	public static int x = 0;
 	public static int y = 0;
-	public static int z = 0;
+	public static int z = -300;
 	public static float viewX = 0;
-	public static float viewY = 90;
+	public static float viewY = 0;
 	public static float fov = 2f;
 	public static float screenSize = 400;
 	public static float res = fov / screenSize;
 	public static float renderDistance = 500;
 	public static void input() {
-		// if(true) { return; }
+		if(true) { return; }
 		/* Get mouse inputs + adjust vision */
 		if(Screen.frame.isFocused()) {
 			Point screenPos = Screen.frame.getLocationOnScreen();

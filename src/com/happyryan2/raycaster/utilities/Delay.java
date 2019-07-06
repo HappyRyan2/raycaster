@@ -34,7 +34,7 @@ public class Delay extends TimerTask {
 		if(Screen.cursor == "hand") {
 			Screen.canvas.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		}
-		else if(false) {
+		else {
 			if(Screen.frame.isFocused())  {
 				BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
 

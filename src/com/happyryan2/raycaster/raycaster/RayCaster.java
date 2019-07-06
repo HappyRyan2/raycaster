@@ -63,8 +63,8 @@ public class RayCaster {
 				relX = (int) (xIncreases * (800 / Player.screenSize));
 				relY = (int) (yIncreases * (800 / Player.screenSize));
 				debugging = false;
-				if(Math.floor(relX) == 600 && Math.floor(relY) == 700) {
-					// debugging = true; // show debug info for this particular ray
+				if(Math.floor(relX) == 400 && Math.floor(relY) == 400) {
+					debugging = true; // show debug info for this particular ray
 				}
 				rotatePosToPlayerView(g, x, y, 1);
 			}
@@ -86,7 +86,9 @@ public class RayCaster {
 	public static void raycast(Graphics g, double dirX, double dirY, double dirZ) {
 		/* Create the first branch of a k-d tree (makes it ~8 times faster by removing 7/8ths of all the triangles)*/
 		// createKDTree();
-		// System.out.println("number of triangles: " + triangularContent.size());
+		if(debugging) {
+			// System.out.println("number of triangles: " + triangularContentCopy.size() + " instead of " + triangularContent.size());
+		}
 		/* Make a list of all triangle intersections for this ray */
 		List<Point3d> intersections = new ArrayList();
 		List<Triangle3d> triangles = new ArrayList();
@@ -107,9 +109,6 @@ public class RayCaster {
 		/* Display intersected triangle's color on the screen */
 		if(intersections.size() == 0) {
 			// the ray doesn't intersect anything
-			float rX = Math.round(dirX * 100) / 100.0f;
-			float rY = Math.round(dirY * 100) / 100.0f;
-			float rZ = Math.round(dirZ * 100) / 100.0f;
 			return;
 		}
 		else if(intersections.size() == 1) {
@@ -120,16 +119,16 @@ public class RayCaster {
 			g.fillRect(relX, relY, (int) (800 / Player.screenSize), (int) (800 / Player.screenSize));
 		}
 		else {
-			/* the ray intersects multiple objects, so render the first one */
+			/* the ray intersects multiple objects, so render the closest one */
 			int lowestIndex = 0;
-			float lowestDistSq = 0;
+			float lowestDistSq = -1;
 			for(int i = 0; i < intersections.size(); i ++) {
 				Point3d intersection = intersections.get(i);
 				float dx = intersection.x - Player.x;
 				float dy = intersection.y - Player.y;
 				float dz = intersection.z - Player.z;
 				float distSq = (dx * dx) + (dy * dy) + (dz * dz);
-				if(distSq < lowestDistSq) {
+				if(distSq < lowestDistSq || lowestDistSq == -1) {
 					lowestIndex = i;
 					lowestDistSq = distSq;
 				}
@@ -143,65 +142,62 @@ public class RayCaster {
 	public static void createKDTree() {
 		/*
 		Creates only the first branch of a kd-tree (non-recursively) by removing triangles that we know won't intersect the ray since they are on opposite sides of an axis.
+		OPTIMIZATION: this function can be run once at the beginning, creating 8 seperate arrays instead of doing it over and over again for each ray.
 		*/
 		triangularContentCopy = new ArrayList();
 		for(int i = 0; i < triangularContent.size(); i ++) {
 			Triangle3d original = triangularContent.get(i);
 			Triangle3d copy = new Triangle3d(original);
-			System.out.println("old: " + original.toString());
-			System.out.println("new: " + copy.toString());
 			triangularContentCopy.add(copy);
 		}
-		// triangularContentCopy = triangularContent;
-		if(true) { return; }
-		// if(rayX < 0) {
-		// 	for(int i = 0; i < triangularContentCopy.size(); i ++) {
-		// 		Triangle3d tri = triangularContentCopy.get(i);
-		// 		if(tri.a.x > Player.x && tri.b.x > Player.x && tri.c.x > Player.x) {
-		// 			triangularContentCopy.remove(i);
-		// 		}
-		// 	}
-		// }
-		// else if(rayX > 0) {
-		// 	for(int i = 0; i < triangularContentCopy.size(); i ++) {
-		// 		Triangle3d tri = triangularContentCopy.get(i);
-		// 		if(tri.a.x < Player.x && tri.b.x < Player.x && tri.c.x < Player.x) {
-		// 			triangularContentCopy.remove(i);
-		// 		}
-		// 	}
-		// }
-		// if(rayY < 0) {
-		// 	for(int i = 0; i < triangularContentCopy.size(); i ++) {
-		// 		Triangle3d tri = triangularContentCopy.get(i);
-		// 		if(tri.a.y > Player.y && tri.b.y > Player.y && tri.c.y > Player.y) {
-		// 			triangularContentCopy.remove(i);
-		// 		}
-		// 	}
-		// }
-		// else if(rayY > 0) {
-		// 	for(int i = 0; i < triangularContentCopy.size(); i ++) {
-		// 		Triangle3d tri = triangularContentCopy.get(i);
-		// 		if(tri.a.y < Player.y && tri.b.y < Player.y && tri.c.y < Player.y) {
-		// 			triangularContentCopy.remove(i);
-		// 		}
-		// 	}
-		// }
-		// if(rayZ < 0) {
-		// 	for(int i = 0; i < triangularContentCopy.size(); i ++) {
-		// 		Triangle3d tri = triangularContentCopy.get(i);
-		// 		if(tri.a.z > Player.z && tri.b.z > Player.z && tri.c.z > Player.z) {
-		// 			triangularContentCopy.remove(i);
-		// 		}
-		// 	}
-		// }
-		// else if(rayZ > 0) {
-		// 	for(int i = 0; i < triangularContentCopy.size(); i ++) {
-		// 		Triangle3d tri = triangularContentCopy.get(i);
-		// 		if(tri.a.z < Player.z && tri.b.z < Player.z && tri.c.z < Player.z) {
-		// 			triangularContentCopy.remove(i);
-		// 		}
-		// 	}
-		// }
+		if(rayX < 0) {
+			for(int i = 0; i < triangularContentCopy.size(); i ++) {
+				Triangle3d tri = triangularContentCopy.get(i);
+				if(tri.a.x > Player.x && tri.b.x > Player.x && tri.c.x > Player.x) {
+					triangularContentCopy.remove(i);
+				}
+			}
+		}
+		else if(rayX > 0) {
+			for(int i = 0; i < triangularContentCopy.size(); i ++) {
+				Triangle3d tri = triangularContentCopy.get(i);
+				if(tri.a.x < Player.x && tri.b.x < Player.x && tri.c.x < Player.x) {
+					triangularContentCopy.remove(i);
+				}
+			}
+		}
+		if(rayY < 0) {
+			for(int i = 0; i < triangularContentCopy.size(); i ++) {
+				Triangle3d tri = triangularContentCopy.get(i);
+				if(tri.a.y > Player.y && tri.b.y > Player.y && tri.c.y > Player.y) {
+					triangularContentCopy.remove(i);
+				}
+			}
+		}
+		else if(rayY > 0) {
+			for(int i = 0; i < triangularContentCopy.size(); i ++) {
+				Triangle3d tri = triangularContentCopy.get(i);
+				if(tri.a.y < Player.y && tri.b.y < Player.y && tri.c.y < Player.y) {
+					triangularContentCopy.remove(i);
+				}
+			}
+		}
+		if(rayZ < 0) {
+			for(int i = 0; i < triangularContentCopy.size(); i ++) {
+				Triangle3d tri = triangularContentCopy.get(i);
+				if(tri.a.z > Player.z && tri.b.z > Player.z && tri.c.z > Player.z) {
+					triangularContentCopy.remove(i);
+				}
+			}
+		}
+		else if(rayZ > 0) {
+			for(int i = 0; i < triangularContentCopy.size(); i ++) {
+				Triangle3d tri = triangularContentCopy.get(i);
+				if(tri.a.z < Player.z && tri.b.z < Player.z && tri.c.z < Player.z) {
+					triangularContentCopy.remove(i);
+				}
+			}
+		}
 	};
 
 	public static void triangle(Point3d a, Point3d b, Point3d c) {
