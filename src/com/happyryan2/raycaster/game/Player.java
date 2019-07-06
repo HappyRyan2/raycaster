@@ -10,12 +10,13 @@ public class Player {
 	public static int y = 0;
 	public static int z = 0;
 	public static float viewX = 0;
-	public static float viewY = 0;
-	public static float fov = 6;
+	public static float viewY = 90;
+	public static float fov = 2f;
 	public static float screenSize = 400;
 	public static float res = fov / screenSize;
 	public static float renderDistance = 500;
 	public static void input() {
+		// if(true) { return; }
 		/* Get mouse inputs + adjust vision */
 		if(Screen.frame.isFocused()) {
 			Point screenPos = Screen.frame.getLocationOnScreen();

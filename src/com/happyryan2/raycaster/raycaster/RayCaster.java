@@ -13,6 +13,7 @@ import com.happyryan2.raycaster.game.Player;
 import com.happyryan2.raycaster.game.LevelDemo;
 import com.happyryan2.raycaster.utilities.Utils;
 import com.happyryan2.raycaster.utilities.Screen;
+import com.happyryan2.raycaster.utilities.MousePos;
 
 public class RayCaster {
 	public static List content = new ArrayList(); // a list containing complex objects - cube, polyhedron, cylinder, etc.
@@ -29,6 +30,7 @@ public class RayCaster {
 	public static List cosTable = new ArrayList();
 	public static boolean initialized = false;
 	public static Color polyhedronColor;
+	private static boolean debugging = false; // temporary
 
 	public static void initTrig() {
 		initialized = true;
@@ -45,7 +47,8 @@ public class RayCaster {
 		Player.input();
 	}
 	public static void render(Graphics g) {
-		if(true) { return; }
+		// System.out.println("(" + MousePos.x + ", " + MousePos.y + ")"); // (526, 566)
+		// if(true) { return; }
 		if(triangularContent.size() != 0) {
 			return;
 		}
@@ -59,49 +62,31 @@ public class RayCaster {
 				yIncreases ++;
 				relX = (int) (xIncreases * (800 / Player.screenSize));
 				relY = (int) (yIncreases * (800 / Player.screenSize));
-				rotatePosToPlayerView(g, x / 10, y / 10, 0.1f);
+				debugging = false;
+				if(Math.floor(relX) == 600 && Math.floor(relY) == 700) {
+					// debugging = true; // show debug info for this particular ray
+				}
+				rotatePosToPlayerView(g, x, y, 1);
 			}
 		}
-		System.out.println("finished rendering");
-		/*
-		res * iterations = fov
-		iterations = fov / res
-		800 = fov / res
-		800 * res = fov
-		res = fov / 800
-		*/
+		g.setColor(new Color(0, 0, 0));
+		// g.fillRect(400, 566, 2, 2);
+		g.fillRect(600, 700, 2, 2);
 		triangularContent.clear();
 	}
 	public static void rotatePosToPlayerView(Graphics g, float x, float y, float z) {
-		/*
-		1. Calculate the angle at which you are facing:
-		let a = atan2(x, z).inDegrees()
-		2. Turn your head horizontally until your nose is on the x-axis.
-		let onAxis = OP.rotate2d(a)
-		3. Rotate on the xy axis by yaw degrees.
-		let rotatedToYaw = onAxis.rotate2d(yaw)
-		4. Turn your head horizontally until your nose is back where it started, but lower / higher. (inverse of step 2)
-		let rotatedToYaw2 = rotatedToYaw.rotate2d(-a);
-		5. Rotate according to horizontal rotation value.
-		return rotatedToYaw2.rotate2d(pitch);
-		*/
 		Point3d beforeRotation = new Point3d(x, y, z);
-		double angleRad = Math.atan2(z, x);
-		double angleDeg = Math.toDegrees(angleRad);
-		Point3d onAxis = beforeRotation.rotateY(-angleDeg); // x >= 0 and z = 0. always on the positive x-axis
-		Point3d rotatedToViewY = onAxis.rotateZ(-Player.viewY);
-		Point3d offAxis = rotatedToViewY.rotateY(angleDeg);
-		Point3d afterRotation = offAxis.rotateY(-Player.viewX);
-		rayX = afterRotation.x;
-		rayY = afterRotation.y;
-		rayZ = afterRotation.z;
-		System.out.println("rotated point: (" + rayX + ", " + rayY + ", " + rayZ + ")");
-		// raycast(g, afterRotation.x, afterRotation.y, afterRotation.z);
+		Point3d rotatedY = beforeRotation.rotateX(Player.viewY);
+		Point3d rotatedX = rotatedY.rotateY(-Player.viewX);
+		rayX = rotatedX.x;
+		rayY = rotatedX.y;
+		rayZ = rotatedX.z;
+		raycast(g, rayX, rayY, rayZ);
 	}
 	public static void raycast(Graphics g, double dirX, double dirY, double dirZ) {
 		/* Create the first branch of a k-d tree (makes it ~8 times faster by removing 7/8ths of all the triangles)*/
-		createKDTree();
-		// System.out.println("number of triangles: " + triangularContentCopy.size());
+		// createKDTree();
+		// System.out.println("number of triangles: " + triangularContent.size());
 		/* Make a list of all triangle intersections for this ray */
 		List<Point3d> intersections = new ArrayList();
 		List<Triangle3d> triangles = new ArrayList();
@@ -117,7 +102,7 @@ public class RayCaster {
 			}
 			intersections.add(intersection);
 			triangles.add(tri);
-			System.out.println("HIT SOMETHING");
+			// System.out.println("HIT SOMETHING");
 		}
 		/* Display intersected triangle's color on the screen */
 		if(intersections.size() == 0) {

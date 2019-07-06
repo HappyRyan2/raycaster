@@ -68,4 +68,18 @@ public class Point3d {
 		*/
 		return "(" + this.x + ", " + this.y + ", " + this.z + ")";
 	}
+	public String toString(boolean rounded) {
+		/*
+		Convert to a string for debugging (coordinates rounded to nearest 0.01)
+		*/
+		if(rounded) {
+			float rX = Math.round(this.x * 1000) / 1000.0f;
+			float rY = Math.round(this.y * 1000) / 1000.0f;
+			float rZ = Math.round(this.z * 1000) / 1000.0f;
+			return new Point3d(rX, rY, rZ).toString();
+		}
+		else {
+			return this.toString();
+		}
+	}
 }
