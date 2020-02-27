@@ -1,6 +1,5 @@
 package io.github.happyryan2.raycaster.raycaster;
 
-// when facing 0 degrees, slope of first ray is -5, -5, 1
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -30,7 +29,6 @@ public class RayCaster {
 	public static List cosTable = new ArrayList();
 	public static boolean initialized = false;
 	public static Color polyhedronColor;
-	private static boolean debugging = false; // temporary
 
 	public static void initTrig() {
 		initialized = true;
@@ -47,8 +45,6 @@ public class RayCaster {
 		Player.input();
 	}
 	public static void render(Graphics g) {
-		// System.out.println("(" + MousePos.x + ", " + MousePos.y + ")"); // (526, 566)
-		// if(true) { return; }
 		if(triangularContent.size() != 0) {
 			return;
 		}
@@ -62,16 +58,9 @@ public class RayCaster {
 				yIncreases ++;
 				relX = (int) (xIncreases * (800 / Player.screenSize));
 				relY = (int) (yIncreases * (800 / Player.screenSize));
-				debugging = false;
-				if(Math.floor(relX) == 400 && Math.floor(relY) == 400) {
-					debugging = true; // show debug info for this particular ray
-				}
 				rotatePosToPlayerView(g, x, y, 1);
 			}
 		}
-		g.setColor(new Color(0, 0, 0));
-		// g.fillRect(400, 566, 2, 2);
-		g.fillRect(600, 700, 2, 2);
 		triangularContent.clear();
 	}
 	public static void rotatePosToPlayerView(Graphics g, float x, float y, float z) {
@@ -86,9 +75,6 @@ public class RayCaster {
 	public static void raycast(Graphics g, double dirX, double dirY, double dirZ) {
 		/* Create the first branch of a k-d tree (makes it ~8 times faster by removing 7/8ths of all the triangles)*/
 		// createKDTree();
-		if(debugging) {
-			// System.out.println("number of triangles: " + triangularContentCopy.size() + " instead of " + triangularContent.size());
-		}
 		/* Make a list of all triangle intersections for this ray */
 		List<Point3d> intersections = new ArrayList();
 		List<Triangle3d> triangles = new ArrayList();
@@ -104,7 +90,6 @@ public class RayCaster {
 			}
 			intersections.add(intersection);
 			triangles.add(tri);
-			// System.out.println("HIT SOMETHING");
 		}
 		/* Display intersected triangle's color on the screen */
 		if(intersections.size() == 0) {

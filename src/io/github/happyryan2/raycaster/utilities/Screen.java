@@ -63,9 +63,6 @@ public class Screen extends JPanel {
 	}
 
 	public void paint(Graphics g) {
-		// io.github.happyryan2.raycaster.game.Player.viewX = 45;
-		// io.github.happyryan2.raycaster.game.Player.viewY = 90; // 90 = up, 0 = forward, -90 = down
-		// RayCaster.rotatePosToPlayerView(g, -5, 0, 0);
 		/* clear background */
 		g.setColor(new Color(255, 255, 255));
 		g.fillRect(0, 0, 800, 800);

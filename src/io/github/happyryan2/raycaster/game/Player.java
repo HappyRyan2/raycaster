@@ -57,9 +57,5 @@ public class Player {
 			x -= dir.x;
 			z -= dir.y; // < not a typo
 		}
-		/* Debug */
-		// io.github.happyryan2.raycaster.raycaster.Point3d before = new io.github.happyryan2.raycaster.raycaster.Point3d(0, 0, 5);
-		// io.github.happyryan2.raycaster.raycaster.Point3d after = before.rotateZ(90);
-		// System.out.println("after rotation: (" + after.x + ", " + after.y + ", " + after.z + ")");
 	}
 }

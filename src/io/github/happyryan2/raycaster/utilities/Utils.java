@@ -59,8 +59,6 @@ public class Utils {
 		while(roll >= 360) {
 			roll -= 360;
 		}
-		// Point rotatedToPitch2d = rotate2d()
-
 		double x1 = x * (double) (RayCaster.cosTable.get(Math.round(roll))) - y * (double) (RayCaster.sinTable.get(Math.round(roll)));
 		double y1 = x * (double) (RayCaster.sinTable.get(Math.round(roll))) + y * (double) (RayCaster.cosTable.get(Math.round(roll)));
 		double z1 = z;
@@ -119,7 +117,7 @@ public class Utils {
 			return false;
 		}
 		else {
-			// the ray intersects the triangle, so check to see if the intersection is close enough to be on the segment
+			/* the ray intersects the triangle, so check to see if the intersection is close enough to be on the segment */
 			float maxDist = dist3dSq(a, b); // length of segment
 			float dist = dist3dSq(a, intersection); // length between point of ray intersection and beginning of ray (one endpoint of segment)
 			return (dist < maxDist);
