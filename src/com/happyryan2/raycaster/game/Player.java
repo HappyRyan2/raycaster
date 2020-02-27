@@ -16,7 +16,7 @@ public class Player {
 	public static float res = fov / screenSize;
 	public static float renderDistance = 500;
 	public static void input() {
-		if(true) { return; }
+		// if(true) { return; }
 		/* Get mouse inputs + adjust vision */
 		if(Screen.frame.isFocused()) {
 			Point screenPos = Screen.frame.getLocationOnScreen();
