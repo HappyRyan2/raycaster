@@ -38,6 +38,7 @@ public class Screen extends JPanel {
 		frame.setSize(800, 800);
 		frame.setResizable(false);
 		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		canvas.setFocusable(true);
 
 		/* Record when the program started */
