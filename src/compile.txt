@@ -1,7 +1,6 @@
 io/github/happyryan2/raycaster/game/LevelDemo.java
 io/github/happyryan2/raycaster/game/Player.java
 io/github/happyryan2/raycaster/raycaster/RayCaster.java
-io/github/happyryan2/raycaster/raycaster/Atom.java
 io/github/happyryan2/raycaster/raycaster/Point3d.java
 io/github/happyryan2/raycaster/raycaster/Vector3d.java
 io/github/happyryan2/raycaster/raycaster/Triangle3d.java
