@@ -14,7 +14,17 @@ import io.github.happyryan2.raycaster.raycaster.*;
 import io.github.happyryan2.raycaster.utilities.*;
 
 public class Delay extends TimerTask {
+	public static boolean calculating = false;
+	public static long frameTime = 0;
+
 	public void run() {
+		if(calculating) {
+			System.out.println("a frame took too long");
+			return;
+		}
+		System.out.println("this frame took " + (System.currentTimeMillis() - frameTime) + " milliseconds");
+		frameTime = System.currentTimeMillis();
+		calculating = true;
 		Screen.cursor = "default";
 		Screen.frameCount ++;
 
@@ -46,6 +56,8 @@ public class Delay extends TimerTask {
 				Screen.canvas.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 			}
 		}
+
+		calculating = false;
 	}
 
 }

@@ -47,7 +47,7 @@ public class Screen extends JPanel {
 		/* schedule framerate interval function */
 		Delay delay = new Delay();
 		Timer timer = new Timer(true); // true = asynchronous
-		timer.scheduleAtFixedRate(delay, 0, 1000 / 15);
+		timer.scheduleAtFixedRate(delay, 0, 1000 / 10);
 
 		/* Listen for user inputs */
 		canvas.addKeyListener(new KeyInputs());
